@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Web\BlogController;
+use App\Http\Controllers\Web\InicioController;
+use App\Http\Controllers\Web\ProductoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/* INICIO RUTAS WEB - PUBLICAS SIN PROTECCIÓN */
+
+Route::get('/', [InicioController::class,"index"]);
+Route::get('blog', [BlogController::class,"index"]);
+Route::get('producto', [ProductoController::class,"index"]);
+
+/* FIN RUTAS WEB - PUBLICAS SIN PROTECCIÓN */
+
+
