@@ -1,6 +1,9 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import dayjs from "@/plugins/dayjs.js";
+import CategoriaModalEliminar from "@/views/dashboard/categoria/CategoriaModalEliminar.vue";
+import CategoriaModalHabilitar from "@/views/dashboard/categoria/CategoriaModalHabilitar.vue";
+import CategoriaModalInhabilitar from "@/views/dashboard/categoria/CategoriaModalInhabilitar.vue";
 
 const filtrosCategoriaInit = {
     registrosPorPagina:15,
@@ -9,6 +12,18 @@ const filtrosCategoriaInit = {
 };
 const categoriasData = ref({});
 const filtrosCategorias = ref({...filtrosCategoriaInit});
+const ojbModalEliminar = ref({
+    id:"",
+    isOpen:false
+});
+const ojbModalHabilitar = ref({
+    id:"",
+    isOpen:false
+});
+const ojbModalInhabilitar = ref({
+    id:"",
+    isOpen:false
+});
 
 const listarCategorias = async (paginaActual = 1) => {
     try {
@@ -39,6 +54,20 @@ onMounted(async () => {
 </script>
 
 <template>
+    <CategoriaModalEliminar :isOpen="ojbModalEliminar.isOpen"
+                            :id="ojbModalEliminar.id"
+                            @cerrarModal="ojbModalEliminar.isOpen = false"
+                            @listarCategorias="listarCategorias"/>
+
+    <CategoriaModalHabilitar :isOpen="ojbModalHabilitar.isOpen"
+                            :id="ojbModalHabilitar.id"
+                            @cerrarModal="ojbModalHabilitar.isOpen = false"
+                            @listarCategorias="listarCategorias"/>
+
+    <CategoriaModalInhabilitar :isOpen="ojbModalInhabilitar.isOpen"
+                             :id="ojbModalInhabilitar.id"
+                             @cerrarModal="ojbModalInhabilitar.isOpen = false"
+                             @listarCategorias="listarCategorias"/>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 ">
@@ -88,9 +117,18 @@ onMounted(async () => {
 
                                     <div class="dropdown-menu" style="">
                                         <a :href="`/dashboard/categorias/${categoria.id}/edit`" class="dropdown-item"><i class="mdi mdi-pencil"></i> Editar</a>
-                                        <button v-if="!categoria.estado" type="button" class="dropdown-item"><i class="mdi mdi-arrow-up"></i> Habilitar</button>
-                                        <button v-else type="button" class="dropdown-item"><i class="mdi mdi-arrow-down"></i> Dar Baja</button>
-                                        <button type="button" class="dropdown-item"><i class="mdi mdi-trash-can"></i> Eliminar</button>
+                                        <button v-if="!categoria.estado" @click="ojbModalHabilitar = {
+                                            id:categoria.id,
+                                            isOpen:true
+                                        }"  type="button" class="dropdown-item"><i class="mdi mdi-arrow-up"></i> Habilitar</button>
+                                        <button v-else @click="ojbModalInhabilitar = {
+                                            id:categoria.id,
+                                            isOpen:true
+                                        }" type="button" class="dropdown-item"><i class="mdi mdi-arrow-down"></i> Dar Baja</button>
+                                        <button @click="ojbModalEliminar = {
+                                            id:categoria.id,
+                                            isOpen:true
+                                        }" type="button" class="dropdown-item"><i class="mdi mdi-trash-can"></i> Eliminar</button>
                                     </div>
                                 </div>
                             </td>
